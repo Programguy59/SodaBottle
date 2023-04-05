@@ -1,39 +1,152 @@
 ﻿<!DOCTYPE html>
+<link rel="stylesheet" href="StyleSheet.css">
+
 <html>
 
 <head>
-    <link rel="stylesheet" href="StyleSheet.css">
-    <meta charset="utf-8" />
-    <title></title>
+        
+        <meta charset="utf-8" />
+        <title></title>
 
 </head>
-
-
-<body>
-    <header class="topnav">
-        <a class="active" href="Index.html">Home</a>
-        <a href="ProduktExampels.html">Produkter</a>
-        <a style="float:right" href="AboutOs.html">About</a>
-    </header>
-
-    <h1 class="titletext">Möblius</h1>
-    <h2 style="text-align: center"> Ægte træ Stole og skamler siden 1382</h2>
-    <h3 class="Column2">
-
-        <div class="gallery">
-            <a target="_blank" href="ProduktExampels.html">
-                <img src="https://i.pinimg.com/originals/ca/3a/9b/ca3a9b2f47c792e4e75bb8e92dc88d3f.png" alt="Billede af lækker stol lavet af træ!">
-            </a>
+<body class="row">
+    <div class="column">
+        <div class="slidecontainer">
+            <p>Percentage of Liquid:</p>
+            <div class="slidecontainer">
+                <input type="range" min="0" max="200" value="100" class="slider" id="myRange">              
+            </div>
         </div>
-        <div class="gallery">
-            <a target="_blank" href="ProduktExampels.html">
-                <img src="https://cdn.shopify.com/s/files/1/0640/7143/4478/products/firkantet-stol_800x.jpg?v=1670597274" alt="Billede af lækker stol lavet af træ!">
-            </a>
+        
+        <div class="dropdown">
+            <button onclick="Dropdown()" class="dropbtn">Choose Liquid</button>
+            <div id="myDropdown" class="dropdown-content">
+              <a href="javascript:choose(pepsiMax);">Pepsi Max</a>
+              <a href="javascript:choose(cokaCola);">Coka Cola</a>
+              <a href="javascript:choose(tuborg);">Tuborg Classic</a>
+              <a href="javascript:choose(Uran);">Uran-234</a>
+
+            </div>
+          </div>
+
+        <p><span id="drinkName"></span> with <span id="drinkAmount"></span> ml has <span id="energy"></span> KJ</p> 
         </div>
-    </h3>
-  
 
-
+    <div class="column">
+        <canvas id="myCanvas" title="myCanvas" width="518" height="566" style="border:1px solid #000000;"
+        </canvas>
+    </div>
 </body>
 
 </html>
+
+
+<script>
+   
+
+    const pepsiMax = { Name: "Pepsi Max", Energy: 1000, Color: "Black" };
+    const cokaCola = { Name: "Coka Cola", Energy: 180000, Color: "Black" };
+    const tuborg = { Name: "Tuborg Classic", Energy: 160000, Color: "Yellow" };
+    const Uran = { Name: "Uran-234", Energy: 90000000000, Color: "Green" };
+
+
+
+
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+    
+
+    var slider = document.getElementById("myRange");
+    var output = slider.value ;
+
+    slider.oninput = function () {
+        var Amount = document.getElementById("drinkAmount")
+        var Volumeofflask = 2000;
+        Amount.innerHTML = this.value/2 / 100 * Volumeofflask;
+        output = (200 - this.value)/2 / 100 * 300;
+        
+        var Energy = document.getElementById("energy")
+        Energy.innerHTML = CurrentEnergy*(this.value / 100 * Volumeofflask)/2/100;
+        
+        draw()
+
+
+
+    }
+
+    function choose(liquid){
+
+        var Name = document.getElementById("drinkName")
+        
+        var Color = document.getElementById("color")
+        
+        Name.innerHTML = liquid.Name ;
+        CurrentEnergy = liquid.Energy;
+        CurrentColor = liquid.Color;
+        Color.innerHTML = CurrentColor;
+  
+
+        
+        
+
+    }
+
+    draw()
+    function draw() {
+      ctx.clearRect(0, 0, ctx.width, ctx.height);  
+        var scale = 2
+
+        const img = new Image();
+        img.src = './bottle.png';
+        img.onload = () => { ctx.drawImage(img, 0, -17 * scale, 259 * scale, 300 * scale); };
+
+        ctx.fillStyle = "#FFFFFF";
+        if(CurrentColor == "Black")
+        {
+        ctx.fillStyle = "#000000";
+        } else if(CurrentColor == "Yellow")
+        {
+        ctx.fillStyle = "#FFFF00";
+        }else if(CurrentColor == "Green")
+        {
+        ctx.fillStyle = "#00FF00";
+        }
+
+
+
+        ctx.fillRect(0, output * scale, 259 * scale, 300 * scale);
+
+        
+       
+
+        
+    }
+    
+
+
+
+
+
+
+/* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function Dropdown() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+</script>
+
+
